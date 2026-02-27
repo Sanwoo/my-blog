@@ -10,7 +10,7 @@ interface ArticleTOCProps {
 
 export function ArticleTOC({ items }: ArticleTOCProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [readingProgress, setReadingProgress] = useState(0);
+  const [readPct, setReadPct] = useState(0);
 
   useEffect(() => {
     const onScroll = () => {
@@ -19,10 +19,9 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
         top: document.getElementById(item.id)?.getBoundingClientRect().top ?? 0,
       }));
 
-      const threshold = window.innerHeight * 0.3;
       let current: string | null = null;
       for (let i = headings.length - 1; i >= 0; i--) {
-        if (headings[i].top <= threshold) {
+        if (headings[i].top <= window.innerHeight * 0.3) {
           current = headings[i].id;
           break;
         }
@@ -33,14 +32,10 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
       const article = document.querySelector("article[data-reading-progress]");
       if (article) {
         const box = article.getBoundingClientRect();
-        const contentHeight = box.height - window.innerHeight;
-        if (contentHeight > 0) {
-          const scrolled = Math.max(0, -box.top);
-          setReadingProgress(Math.min(100, Math.ceil((scrolled / contentHeight) * 100)));
-        }
+        const h = box.height - window.innerHeight;
+        if (h > 0) setReadPct(Math.min(100, Math.ceil((Math.max(0, -box.top) / h) * 100)));
       }
     };
-
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -49,9 +44,9 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
   if (items.length === 0) return null;
 
   return (
-    <aside className="hidden xl:block w-56 flex-shrink-0">
-      <nav className="sticky top-20 space-y-0.5" aria-label="本页目录">
-        <div className="space-y-0.5">
+    <aside className="hidden xl:block w-52 flex-shrink-0">
+      <nav className="sticky top-24" aria-label="目录">
+        <div className="space-y-[2px]">
           {items.map((item) => (
             <Link
               key={item.id}
@@ -66,14 +61,12 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
             </Link>
           ))}
         </div>
-        <div className="pt-4 mt-4 border-t border-light-border dark:border-dark-border">
-          <div className="flex items-center gap-2 text-xs text-light-muted dark:text-dark-muted">
-            <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <circle cx={12} cy={12} r={10} />
-              <path d="M12 6v6l4 2" />
-            </svg>
-            {readingProgress}%
-          </div>
+        <div className="mt-6 pt-4 border-t border-light-border/40 dark:border-dark-border/40 flex items-center gap-1.5 text-[12px] text-light-muted dark:text-dark-muted tabular-nums">
+          <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+            <path d="M22 12A10 10 0 0 0 12 2v10z" />
+          </svg>
+          {readPct}%
         </div>
       </nav>
     </aside>

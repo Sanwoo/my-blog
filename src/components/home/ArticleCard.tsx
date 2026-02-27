@@ -15,24 +15,19 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
-  const {
-    slug,
-    title,
-    date,
-    readTime,
-    href = slug ? `/posts/${slug}` : "#",
-  } = article;
+  const { slug, title, date, href = slug ? `/posts/${slug}` : "#" } = article;
 
   return (
-    <Link href={href} className="group flex items-start gap-3 py-2.5 -mx-2 px-2 rounded-lg hover:bg-light-bg-soft dark:hover:bg-dark-bg-secondary transition-colors">
-      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-light-accent dark:bg-dark-accent flex-shrink-0" />
-      <span className="flex-1 min-w-0">
-        <span className="text-[15px] text-light-text dark:text-dark-text group-hover:text-light-accent dark:group-hover:text-dark-accent transition-colors line-clamp-2">
-          {title}
-        </span>
+    <Link
+      href={href}
+      className="group flex items-baseline gap-3 py-3 transition-colors duration-200"
+    >
+      <span className="mt-[7px] w-[5px] h-[5px] rounded-full bg-light-accent dark:bg-dark-accent flex-shrink-0 group-hover:scale-125 transition-transform duration-200" />
+      <span className="flex-1 min-w-0 text-[15px] leading-relaxed text-light-text dark:text-dark-text group-hover:text-light-accent dark:group-hover:text-dark-accent transition-colors duration-200">
+        {title}
       </span>
-      <span className="text-xs text-light-muted dark:text-dark-muted flex-shrink-0 mt-0.5 tabular-nums">
-        {date || readTime}
+      <span className="text-[13px] text-light-muted dark:text-dark-muted flex-shrink-0 tabular-nums tracking-tight">
+        {date}
       </span>
     </Link>
   );

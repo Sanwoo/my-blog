@@ -3,51 +3,23 @@
 import Link from "next/link";
 import { OnlineIndicator } from "@/components/shared/OnlineIndicator";
 
-const footerLinks = [
-  { label: "关于", href: "#" },
-  { label: "文章", href: "#" },
-  { label: "笔记", href: "#" },
-  { label: "时间线", href: "#" },
-];
-
-const footerSecondary = [
-  { label: "RSS", href: "#" },
-  { label: "Sitemap", href: "#" },
-  { label: "GitHub", href: "#" },
-];
-
 export function Footer() {
   return (
-    <footer className="border-t border-light-border dark:border-dark-border mt-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-        {/* Links */}
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-light-muted dark:text-dark-muted mb-6">
-          {footerLinks.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
-            >
-              {label}
-            </Link>
+    <footer className="border-t border-light-border/40 dark:border-dark-border/40 mt-16">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 py-12 text-center space-y-5">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13px] text-light-muted dark:text-dark-muted">
+          {["关于", "文章", "笔记", "时间线"].map(l => (
+            <Link key={l} href="#" className="hover:text-light-text-secondary dark:hover:text-dark-text-secondary transition-colors duration-200">{l}</Link>
           ))}
           <span className="text-light-border dark:text-dark-border">·</span>
-          {footerSecondary.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
-            >
-              {label}
-            </Link>
+          {["RSS", "Sitemap", "GitHub"].map(l => (
+            <Link key={l} href="#" className="hover:text-light-text-secondary dark:hover:text-dark-text-secondary transition-colors duration-200">{l}</Link>
           ))}
         </div>
-
-        {/* Meta */}
-        <div className="flex flex-col items-center gap-3 text-xs text-light-muted dark:text-dark-muted">
-          <p>© 2020-{new Date().getFullYear()} Echoes · Stay hungry, Stay foolish.</p>
-          <OnlineIndicator pagePath="/" showPageCount={false} />
-        </div>
+        <p className="text-[12px] text-light-muted dark:text-dark-muted">
+          © 2020–{new Date().getFullYear()} Echoes · Stay hungry, Stay foolish.
+        </p>
+        <OnlineIndicator pagePath="/" showPageCount={false} />
       </div>
     </footer>
   );

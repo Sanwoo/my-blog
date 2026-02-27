@@ -7,18 +7,14 @@ export function ThemeToggle() {
     const isDark = document.documentElement.classList.contains("dark");
     const next = isDark ? "light" : "dark";
     localStorage.setItem("theme", next);
-    if (next === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", next === "dark");
   };
 
   return (
     <button
       type="button"
       onClick={toggle}
-      className="p-1.5 text-light-muted dark:text-dark-muted hover:text-light-text dark:hover:text-dark-text hover:bg-light-bg-secondary dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
+      className="p-2 text-light-muted dark:text-dark-muted hover:text-light-text-secondary dark:hover:text-dark-text-secondary transition-colors duration-200 rounded-lg"
       aria-label="切换主题"
     >
       <Moon width={16} height={16} className="hidden dark:block" aria-hidden />

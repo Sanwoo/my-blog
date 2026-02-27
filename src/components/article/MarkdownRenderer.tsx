@@ -12,21 +12,31 @@ interface MarkdownRendererProps {
 
 const components: Components = {
   h2: ({ children, id, ...props }) => (
-    <h2 id={id} className="text-xl font-bold mt-14 mb-4 scroll-mt-20 text-light-text dark:text-dark-text" {...props}>
+    <h2
+      id={id}
+      className="text-[1.4rem] font-semibold mt-16 mb-5 scroll-mt-24 text-light-text dark:text-dark-text tracking-tight leading-snug"
+      {...props}
+    >
       {children}
     </h2>
   ),
   h3: ({ children, id, ...props }) => (
-    <h3 id={id} className="text-lg font-semibold mt-10 mb-3 scroll-mt-20 text-light-text dark:text-dark-text" {...props}>
+    <h3
+      id={id}
+      className="text-[1.15rem] font-semibold mt-12 mb-4 scroll-mt-24 text-light-text dark:text-dark-text tracking-tight"
+      {...props}
+    >
       {children}
     </h3>
   ),
   p: ({ children, ...props }) => (
-    <p className="mb-5 leading-[1.8] text-light-text-secondary dark:text-dark-text-secondary" {...props}>{children}</p>
+    <p className="mb-6 text-[16.5px] leading-[1.85] text-light-text-secondary dark:text-dark-text-secondary" {...props}>
+      {children}
+    </p>
   ),
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="border-l-[3px] border-light-accent dark:border-dark-accent pl-4 my-6 text-light-muted dark:text-dark-muted italic"
+      className="border-l-[3px] border-light-accent/60 dark:border-dark-accent/60 pl-5 my-8 [&_p]:text-light-muted [&_p]:dark:text-dark-muted [&_p]:italic [&_p]:mb-2"
       {...props}
     >
       {children}
@@ -34,7 +44,7 @@ const components: Components = {
   ),
   pre: ({ children, ...props }) => (
     <pre
-      className="bg-light-bg-secondary dark:bg-dark-card p-4 rounded-lg overflow-x-auto my-6 text-sm font-mono leading-relaxed border border-light-border dark:border-dark-border"
+      className="bg-light-bg-soft dark:bg-dark-bg-soft px-5 py-4 rounded-lg overflow-x-auto my-8 text-[14px] font-mono leading-[1.7] border border-light-border/60 dark:border-dark-border/60"
       {...props}
     >
       {children}
@@ -45,23 +55,19 @@ const components: Components = {
     if (isInline) {
       return (
         <code
-          className="px-1.5 py-0.5 rounded bg-light-accent-soft dark:bg-dark-accent-soft text-light-accent dark:text-dark-accent text-[0.9em] font-mono"
+          className="px-1.5 py-[2px] rounded-[4px] bg-light-accent-soft dark:bg-dark-accent-soft text-light-accent dark:text-dark-accent text-[0.9em] font-mono"
           {...props}
         >
           {children}
         </code>
       );
     }
-    return (
-      <code className={`${className ?? ""} font-mono text-sm`} {...props}>
-        {children}
-      </code>
-    );
+    return <code className={`${className ?? ""} font-mono`} {...props}>{children}</code>;
   },
   a: ({ children, href, ...props }) => (
     <a
       href={href}
-      className="text-light-accent dark:text-dark-accent underline underline-offset-2 decoration-light-accent/30 dark:decoration-dark-accent/30 hover:decoration-light-accent dark:hover:decoration-dark-accent transition-colors"
+      className="text-light-accent dark:text-dark-accent link-hover"
       target={href?.startsWith("http") ? "_blank" : undefined}
       rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
       {...props}
@@ -70,66 +76,52 @@ const components: Components = {
     </a>
   ),
   img: ({ src, alt, ...props }) => (
-    <span className="block my-8">
-      <img
-        src={src}
-        alt={alt ?? ""}
-        className="rounded-lg max-w-full mx-auto"
-        loading="lazy"
-        {...props}
-      />
-      {alt && (
-        <span className="block text-center text-xs text-light-muted dark:text-dark-muted mt-2">
-          {alt}
-        </span>
-      )}
+    <span className="block my-10">
+      <img src={src} alt={alt ?? ""} className="rounded-lg max-w-full mx-auto" loading="lazy" {...props} />
+      {alt && <span className="block text-center text-[13px] text-light-muted dark:text-dark-muted mt-3">{alt}</span>}
     </span>
   ),
   table: ({ children, ...props }) => (
-    <div className="overflow-x-auto my-6">
-      <table className="min-w-full text-sm" {...props}>
-        {children}
-      </table>
+    <div className="overflow-x-auto my-8">
+      <table className="min-w-full text-[15px]" {...props}>{children}</table>
     </div>
   ),
   th: ({ children, ...props }) => (
-    <th className="border-b-2 border-light-border dark:border-dark-border px-3 py-2 font-semibold text-left text-light-text dark:text-dark-text" {...props}>
+    <th className="border-b-2 border-light-border dark:border-dark-border px-3 py-2.5 font-semibold text-left text-light-text dark:text-dark-text text-[14px]" {...props}>
       {children}
     </th>
   ),
   td: ({ children, ...props }) => (
-    <td className="border-b border-light-border dark:border-dark-border px-3 py-2 text-light-text-secondary dark:text-dark-text-secondary" {...props}>
+    <td className="border-b border-light-border/60 dark:border-dark-border/60 px-3 py-2.5 text-light-text-secondary dark:text-dark-text-secondary" {...props}>
       {children}
     </td>
   ),
   ul: ({ children, ...props }) => (
-    <ul className="list-disc pl-5 mb-5 space-y-1.5 text-light-text-secondary dark:text-dark-text-secondary marker:text-light-accent dark:marker:text-dark-accent" {...props}>{children}</ul>
+    <ul className="pl-5 mb-6 space-y-2 text-[16.5px] leading-[1.85] text-light-text-secondary dark:text-dark-text-secondary list-disc marker:text-light-accent/60 dark:marker:text-dark-accent/60" {...props}>
+      {children}
+    </ul>
   ),
   ol: ({ children, ...props }) => (
-    <ol className="list-decimal pl-5 mb-5 space-y-1.5 text-light-text-secondary dark:text-dark-text-secondary" {...props}>{children}</ol>
+    <ol className="pl-5 mb-6 space-y-2 text-[16.5px] leading-[1.85] text-light-text-secondary dark:text-dark-text-secondary list-decimal marker:text-light-muted dark:marker:text-dark-muted" {...props}>
+      {children}
+    </ol>
   ),
   li: ({ children, ...props }) => (
-    <li className="leading-[1.8]" {...props}>{children}</li>
+    <li className="leading-[1.85] pl-1" {...props}>{children}</li>
   ),
-  hr: () => (
-    <hr className="my-10 border-light-border dark:border-dark-border" />
-  ),
+  hr: () => <hr className="my-12 border-light-border/60 dark:border-dark-border/60" />,
   strong: ({ children, ...props }) => (
     <strong className="font-semibold text-light-text dark:text-dark-text" {...props}>{children}</strong>
+  ),
+  em: ({ children, ...props }) => (
+    <em className="italic" {...props}>{children}</em>
   ),
 };
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
-    <article
-      className="max-w-none animate-fade-in"
-      data-reading-progress
-    >
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSlug]}
-        components={components}
-      >
+    <article className="max-w-none animate-fade-up" data-reading-progress>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSlug]} components={components}>
         {content}
       </ReactMarkdown>
     </article>

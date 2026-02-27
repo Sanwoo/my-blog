@@ -10,24 +10,23 @@ const recentNotes = [
 
 export function Sidebar() {
   return (
-    <aside className="lg:col-span-5 space-y-10">
-      {/* Recent Notes */}
+    <aside className="lg:col-span-5 space-y-12">
       <section>
-        <h2 className="text-lg font-medium text-light-text dark:text-dark-text mb-4">
-          最新笔记
+        <h2 className="text-lg font-medium text-light-text dark:text-dark-text mb-2">
+          Recent Notes
         </h2>
-        <div className="space-y-0.5">
+        <div className="stagger">
           {recentNotes.map((note) => (
             <a
               key={note.title}
               href="#"
-              className="group flex items-start gap-3 py-2.5 -mx-2 px-2 rounded-lg hover:bg-light-bg-soft dark:hover:bg-dark-bg-secondary transition-colors"
+              className="group flex items-baseline gap-3 py-3 transition-colors duration-200"
             >
-              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-light-accent/40 dark:bg-dark-accent/40 flex-shrink-0" />
-              <span className="flex-1 text-[15px] text-light-text-secondary dark:text-dark-text-secondary group-hover:text-light-accent dark:group-hover:text-dark-accent transition-colors line-clamp-2">
+              <span className="mt-[7px] w-[5px] h-[5px] rounded-full bg-light-accent/30 dark:bg-dark-accent/30 group-hover:bg-light-accent dark:group-hover:bg-dark-accent flex-shrink-0 transition-colors duration-200" />
+              <span className="flex-1 text-[15px] leading-relaxed text-light-text-secondary dark:text-dark-text-secondary group-hover:text-light-text dark:group-hover:text-dark-text transition-colors duration-200">
                 {note.title}
               </span>
-              <span className="text-xs text-light-muted dark:text-dark-muted flex-shrink-0 mt-0.5 tabular-nums">
+              <span className="text-[13px] text-light-muted dark:text-dark-muted flex-shrink-0 tabular-nums tracking-tight">
                 {note.time}
               </span>
             </a>
@@ -35,10 +34,9 @@ export function Sidebar() {
         </div>
       </section>
 
-      {/* Online Status */}
-      <section className="p-4 rounded-xl bg-light-bg-soft dark:bg-dark-bg-secondary border border-light-border dark:border-dark-border">
+      <section className="p-5 rounded-xl bg-light-bg-soft dark:bg-dark-bg-soft border border-light-border/60 dark:border-dark-border/60">
         <OnlineIndicator pagePath="/" showPageCount={false} />
-        <p className="text-xs text-light-muted dark:text-dark-muted mt-3 leading-relaxed">
+        <p className="text-[13px] text-light-muted dark:text-dark-muted mt-3 leading-relaxed italic">
           Stay hungry, Stay foolish.
         </p>
       </section>
