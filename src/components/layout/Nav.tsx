@@ -44,7 +44,7 @@ export function Nav() {
               <Link
                 key={label}
                 href={href}
-                className={`px-3.5 py-1.5 text-[15px] rounded-lg transition-colors duration-200 ${
+                className={`nav-link px-3.5 py-1.5 text-[15px] transition-colors duration-200 ${
                   active
                     ? "text-light-accent dark:text-dark-accent font-medium"
                     : "text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text dark:hover:text-dark-text"

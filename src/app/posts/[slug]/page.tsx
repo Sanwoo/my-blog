@@ -9,6 +9,7 @@ import { ArticleTOC } from "@/components/article/ArticleTOC";
 import { CommentSection } from "@/components/article/CommentSection";
 import { ShareButtons } from "@/components/article/ShareButtons";
 import { OnlineIndicator } from "@/components/shared/OnlineIndicator";
+import { ScrollFadeIn } from "@/components/shared/ScrollFadeIn";
 import { getPostBySlug, getAllPosts } from "@/lib/supabase-posts";
 import type { Metadata } from "next";
 
@@ -58,22 +59,28 @@ export default async function PostPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center gap-12">
           {/* Main content */}
           <div className="max-w-3xl w-full">
-            {post.contentFormat === "markdown" ? (
-              <MarkdownRenderer content={post.content} />
-            ) : (
-              <ArticleBody content={post.content} />
-            )}
+            <ScrollFadeIn>
+              {post.contentFormat === "markdown" ? (
+                <MarkdownRenderer content={post.content} />
+              ) : (
+                <ArticleBody content={post.content} />
+              )}
+            </ScrollFadeIn>
 
             {/* Share & Online */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-12 pt-8 border-t border-light-border dark:border-dark-border">
-              <OnlineIndicator pagePath={`/posts/${slug}`} postSlug={slug} />
-              <ShareButtons title={articleTitle} url={articleUrl} />
-            </div>
+            <ScrollFadeIn>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-12 pt-8 border-t border-light-border/40 dark:border-dark-border/40">
+                <OnlineIndicator pagePath={`/posts/${slug}`} postSlug={slug} />
+                <ShareButtons title={articleTitle} url={articleUrl} />
+              </div>
+            </ScrollFadeIn>
 
             {/* Comments */}
-            <div className="mt-16">
-              <CommentSection postSlug={slug} />
-            </div>
+            <ScrollFadeIn delay={100}>
+              <div className="mt-16">
+                <CommentSection postSlug={slug} />
+              </div>
+            </ScrollFadeIn>
           </div>
 
           {/* TOC sidebar */}

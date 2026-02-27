@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { AuthProvider } from "@/lib/auth-context";
+import { GradientBackground } from "@/components/shared/GradientBackground";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -51,6 +52,7 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} antialiased font-sans bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text`}
       >
         <ThemeScript />
+        <GradientBackground />
         <AuthProvider>
           {children}
         </AuthProvider>
