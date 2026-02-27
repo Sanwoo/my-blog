@@ -91,15 +91,18 @@ export async function toggleCommentLike(commentId: string, userId: string, hasLi
 
   if (hasLiked) {
     await supabase.from("comment_likes").delete().eq("comment_id", commentId).eq("user_id", userId);
-    await supabase.rpc("decrement_comment_likes", { cid: commentId }).catch(() => {
-      supabase.from("comments").update({ likes: 0 }).eq("id", commentId).lt("likes", 1);
-    });
+    await supabase.from("comments").update({ likes: Math.max(0) }).eq("id", commentId);
   } else {
     await supabase.from("comment_likes").insert({ comment_id: commentId, user_id: userId });
   }
 
-  const { data } = await supabase.from("comments").select("likes").eq("id", commentId).single();
-  return data?.likes ?? 0;
+  const { count } = await supabase
+    .from("comment_likes")
+    .select("*", { count: "exact", head: true })
+    .eq("comment_id", commentId);
+  const newLikes = count ?? 0;
+  await supabase.from("comments").update({ likes: newLikes }).eq("id", commentId);
+  return newLikes;
 }
 
 export async function deleteComment(commentId: string) {
