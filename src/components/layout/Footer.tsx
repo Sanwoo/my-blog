@@ -3,36 +3,50 @@
 import Link from "next/link";
 import { OnlineIndicator } from "@/components/shared/OnlineIndicator";
 
+const footerLinks = [
+  { label: "关于", href: "#" },
+  { label: "文章", href: "#" },
+  { label: "笔记", href: "#" },
+  { label: "时间线", href: "#" },
+];
+
+const footerSecondary = [
+  { label: "RSS", href: "#" },
+  { label: "Sitemap", href: "#" },
+  { label: "GitHub", href: "#" },
+];
+
 export function Footer() {
   return (
-    <footer className="border-t border-light-border dark:border-dark-border mt-20 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="font-serif text-lg italic text-light-text dark:text-dark-text">Echoes.</span>
-              <p className="text-xs text-light-muted dark:text-dark-muted">
-                探索设计、技术与生活的交汇点
-              </p>
-            </div>
-            <div className="flex gap-6 text-sm text-light-muted dark:text-dark-muted">
-              <Link href="#" className="hover:text-light-text dark:hover:text-dark-text transition-colors">
-                Privacy
-              </Link>
-              <Link href="#" className="hover:text-light-text dark:hover:text-dark-text transition-colors">
-                Terms
-              </Link>
-              <Link href="#" className="hover:text-light-text dark:hover:text-dark-text transition-colors">
-                RSS
-              </Link>
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-4 border-t border-light-border/50 dark:border-dark-border/50">
-            <p className="text-xs text-light-muted dark:text-dark-muted">
-              © {new Date().getFullYear()} Echoes Blog. All rights reserved.
-            </p>
-            <OnlineIndicator pagePath="/" showPageCount={false} />
-          </div>
+    <footer className="border-t border-light-border dark:border-dark-border mt-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        {/* Links */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-light-muted dark:text-dark-muted mb-6">
+          {footerLinks.map(({ label, href }) => (
+            <Link
+              key={label}
+              href={href}
+              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
+            >
+              {label}
+            </Link>
+          ))}
+          <span className="text-light-border dark:text-dark-border">·</span>
+          {footerSecondary.map(({ label, href }) => (
+            <Link
+              key={label}
+              href={href}
+              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Meta */}
+        <div className="flex flex-col items-center gap-3 text-xs text-light-muted dark:text-dark-muted">
+          <p>© 2020-{new Date().getFullYear()} Echoes · Stay hungry, Stay foolish.</p>
+          <OnlineIndicator pagePath="/" showPageCount={false} />
         </div>
       </div>
     </footer>

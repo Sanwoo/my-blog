@@ -10,7 +10,7 @@ interface ArticleTOCProps {
 
 export function ArticleTOC({ items }: ArticleTOCProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [readingProgress, setReadingProgress] = useState(0);
 
   useEffect(() => {
     const onScroll = () => {
@@ -19,10 +19,10 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
         top: document.getElementById(item.id)?.getBoundingClientRect().top ?? 0,
       }));
 
-      const viewportMiddle = window.innerHeight / 2;
+      const threshold = window.innerHeight * 0.3;
       let current: string | null = null;
       for (let i = headings.length - 1; i >= 0; i--) {
-        if (headings[i].top <= viewportMiddle + 100) {
+        if (headings[i].top <= threshold) {
           current = headings[i].id;
           break;
         }
@@ -30,9 +30,15 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
       if (!current && headings.length > 0) current = headings[0].id;
       setActiveId(current);
 
-      const currentIdx = current ? items.findIndex((i) => i.id === current) : 0;
-      const pct = items.length > 1 ? Math.round((currentIdx / (items.length - 1)) * 100) : 0;
-      setProgress(pct);
+      const article = document.querySelector("article[data-reading-progress]");
+      if (article) {
+        const box = article.getBoundingClientRect();
+        const contentHeight = box.height - window.innerHeight;
+        if (contentHeight > 0) {
+          const scrolled = Math.max(0, -box.top);
+          setReadingProgress(Math.min(100, Math.ceil((scrolled / contentHeight) * 100)));
+        }
+      }
     };
 
     onScroll();
@@ -43,37 +49,31 @@ export function ArticleTOC({ items }: ArticleTOCProps) {
   if (items.length === 0) return null;
 
   return (
-    <aside className="lg:col-span-4 hidden lg:block">
-      <nav className="sticky top-28 space-y-1" aria-label="本页目录">
-        <h4 className="text-xs font-bold uppercase tracking-widest text-light-muted dark:text-dark-muted mb-4">
-          本页目录
-        </h4>
-        <div className="relative pl-4 border-l-2 border-light-border dark:border-dark-border">
-          <div
-            className="absolute left-[-1px] w-0.5 bg-light-accent dark:bg-dark-accent transition-all duration-300"
-            style={{
-              top: 0,
-              height: `${progress}%`,
-            }}
-          />
-          {items.map((item) => {
-            const isH3 = item.label.match(/^\d+\.\d+/) || false;
-            return (
-              <Link
-                key={item.id}
-                href={`#${item.id}`}
-                className={`toc-link block py-1.5 text-sm transition-all duration-200 ${
-                  isH3 ? "pl-3 text-xs" : ""
-                } ${
-                  activeId === item.id
-                    ? "active font-medium translate-x-1"
-                    : "text-light-muted dark:text-dark-muted hover:text-light-text dark:hover:text-dark-text"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+    <aside className="hidden xl:block w-56 flex-shrink-0">
+      <nav className="sticky top-20 space-y-0.5" aria-label="本页目录">
+        <div className="space-y-0.5">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={`#${item.id}`}
+              className={`toc-link block py-1 text-[13px] leading-relaxed transition-all duration-200 ${
+                activeId === item.id
+                  ? "active"
+                  : "text-light-muted dark:text-dark-muted hover:text-light-text-secondary dark:hover:text-dark-text-secondary"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <div className="pt-4 mt-4 border-t border-light-border dark:border-dark-border">
+          <div className="flex items-center gap-2 text-xs text-light-muted dark:text-dark-muted">
+            <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx={12} cy={12} r={10} />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            {readingProgress}%
+          </div>
         </div>
       </nav>
     </aside>

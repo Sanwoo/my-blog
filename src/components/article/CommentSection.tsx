@@ -53,11 +53,11 @@ function CommentInput({
   };
 
   return (
-    <div className="bg-white dark:bg-white/5 p-4 rounded-2xl border border-light-border dark:border-dark-border">
+    <div className="bg-light-bg-soft dark:bg-dark-bg-secondary p-4 rounded-xl border border-light-border dark:border-dark-border">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="w-full bg-transparent border-0 focus:ring-0 focus:outline-none p-0 text-light-text dark:text-dark-text placeholder:text-light-muted/50 min-h-[80px] resize-none text-sm"
+        className="w-full bg-transparent border-0 focus:ring-0 focus:outline-none p-0 text-light-text dark:text-dark-text placeholder:text-light-muted/50 min-h-[80px] resize-none text-sm leading-relaxed"
         placeholder={placeholder}
         autoFocus={autoFocus}
         aria-label="评论内容"
@@ -67,7 +67,7 @@ function CommentInput({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-1.5 text-sm text-light-muted hover:text-light-text dark:hover:text-dark-text transition-colors"
+            className="px-3 py-1.5 text-sm text-light-muted hover:text-light-text dark:hover:text-dark-text transition-colors rounded-lg"
           >
             取消
           </button>
@@ -76,9 +76,9 @@ function CommentInput({
           type="button"
           onClick={handleSubmit}
           disabled={!content.trim() || submitting}
-          className="px-5 py-1.5 bg-light-accent dark:bg-dark-accent text-white dark:text-black rounded-full text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="px-4 py-1.5 bg-light-accent dark:bg-dark-accent text-white rounded-lg text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          {submitting ? "发布中..." : "发布评论"}
+          {submitting ? "发布中..." : "发布"}
         </button>
       </div>
     </div>
@@ -301,13 +301,13 @@ export function CommentSection({ postSlug }: CommentSectionProps) {
           <CommentInput onSubmit={handleSubmit} />
         </div>
       ) : (
-        <div className="mb-8 p-6 bg-light-bg-secondary dark:bg-dark-card/50 rounded-2xl border border-light-border dark:border-dark-border text-center">
+        <div className="mb-8 p-6 bg-light-bg-soft dark:bg-dark-bg-secondary rounded-xl border border-light-border dark:border-dark-border text-center">
           <p className="text-sm text-light-muted dark:text-dark-muted mb-4">登录后即可发表评论</p>
           <div className="flex justify-center gap-3">
             <button
               type="button"
               onClick={signInWithGitHub}
-              className="flex items-center gap-2 px-4 py-2 bg-[#24292e] text-white rounded-full text-sm font-medium hover:bg-[#1a1e22] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[#24292e] text-white rounded-lg text-sm font-medium hover:bg-[#1a1e22] transition-colors"
             >
               <Github width={16} height={16} />
               GitHub 登录
@@ -315,7 +315,7 @@ export function CommentSection({ postSlug }: CommentSectionProps) {
             <button
               type="button"
               onClick={signInWithGoogle}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-dark-bg text-light-text dark:text-dark-text border border-light-border dark:border-dark-border rounded-full text-sm font-medium hover:bg-light-bg-secondary dark:hover:bg-dark-card transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-dark-bg text-light-text dark:text-dark-text border border-light-border dark:border-dark-border rounded-lg text-sm font-medium hover:bg-light-bg-secondary dark:hover:bg-dark-card transition-colors"
             >
               <svg viewBox="0 0 24 24" width={16} height={16}>
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />

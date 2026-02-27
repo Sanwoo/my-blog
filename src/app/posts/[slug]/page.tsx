@@ -49,29 +49,38 @@ export default async function PostPage({ params }: PageProps) {
     <div className="min-h-screen flex flex-col bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text">
       <Nav />
       <ReadingProgress />
-      <main className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex-grow">
-        <ArticleHeader meta={post.meta} />
 
-        <div className="flex items-center justify-between mb-8 max-w-4xl">
-          <OnlineIndicator pagePath={`/posts/${slug}`} postSlug={slug} />
-          <ShareButtons title={articleTitle} url={articleUrl} />
+      <main className="pt-24 md:pt-32 pb-16 flex-grow">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <ArticleHeader meta={post.meta} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative">
-          <div className="lg:col-span-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center gap-12">
+          {/* Main content */}
+          <div className="max-w-3xl w-full">
             {post.contentFormat === "markdown" ? (
               <MarkdownRenderer content={post.content} />
             ) : (
               <ArticleBody content={post.content} />
             )}
+
+            {/* Share & Online */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-12 pt-8 border-t border-light-border dark:border-dark-border">
+              <OnlineIndicator pagePath={`/posts/${slug}`} postSlug={slug} />
+              <ShareButtons title={articleTitle} url={articleUrl} />
+            </div>
+
+            {/* Comments */}
+            <div className="mt-16">
+              <CommentSection postSlug={slug} />
+            </div>
           </div>
+
+          {/* TOC sidebar */}
           <ArticleTOC items={post.tocItems} />
         </div>
-
-        <div className="my-20 h-px bg-light-border dark:bg-dark-border" />
-
-        <CommentSection postSlug={slug} />
       </main>
+
       <Footer />
     </div>
   );
