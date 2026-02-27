@@ -148,6 +148,7 @@ export function useEditorForm() {
       }),
     ],
     content: defaultContent,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
