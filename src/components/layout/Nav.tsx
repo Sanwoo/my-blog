@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Menu, X } from "lucide-react";
+import Image from "next/image";
+import { Search, Menu, X, PenSquare } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useAuth } from "@/lib/auth-context";
 
 const navLinks = [
   { href: "/", label: "首页" },
@@ -16,6 +18,7 @@ const navLinks = [
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -58,7 +61,7 @@ export function Nav() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               className="p-2 text-light-text dark:text-dark-text hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors"
@@ -67,6 +70,27 @@ export function Nav() {
               <Search width={20} height={20} aria-hidden />
             </button>
             <ThemeToggle />
+            {isAdmin && (
+              <Link
+                href="/editor"
+                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm text-light-accent dark:text-dark-accent hover:bg-light-accent/10 dark:hover:bg-dark-accent/10 rounded-full transition-colors"
+              >
+                <PenSquare width={16} height={16} />
+                写文章
+              </Link>
+            )}
+            {user && (
+              <div className="hidden md:block relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-light-border dark:ring-dark-border">
+                <Image
+                  src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
+                  alt="avatar"
+                  width={32}
+                  height={32}
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            )}
             <button
               type="button"
               className="md:hidden p-2 text-light-text dark:text-dark-text hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors"
@@ -105,6 +129,15 @@ export function Nav() {
               {label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/editor"
+              className="text-lg font-medium text-light-accent dark:text-dark-accent"
+              onClick={() => setMobileOpen(false)}
+            >
+              写文章
+            </Link>
+          )}
         </div>
       </div>
     </nav>

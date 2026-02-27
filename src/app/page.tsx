@@ -5,6 +5,8 @@ import { ArticleList } from "@/components/home/ArticleList";
 import { Sidebar } from "@/components/home/Sidebar";
 import { getAllPosts } from "@/lib/supabase-posts";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const articles = await getAllPosts();
   return (
