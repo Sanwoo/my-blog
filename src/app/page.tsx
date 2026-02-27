@@ -19,13 +19,11 @@ export default async function Home() {
 
           <div className="border-t border-light-border/40 dark:border-dark-border/40" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 py-16 md:py-20">
-            <main className="lg:col-span-7">
-              <ScrollFadeIn>
-                <ArticleList articles={articles} />
-              </ScrollFadeIn>
-            </main>
-            <ScrollFadeIn delay={150}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 py-16 md:py-20">
+            <ScrollFadeIn className="lg:col-span-7 min-w-0">
+              <ArticleList articles={articles} />
+            </ScrollFadeIn>
+            <ScrollFadeIn delay={150} className="lg:col-span-5 min-w-0">
               <Sidebar />
             </ScrollFadeIn>
           </div>

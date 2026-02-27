@@ -10,7 +10,7 @@ const recentNotes = [
 
 export function Sidebar() {
   return (
-    <aside className="lg:col-span-5 space-y-12">
+    <aside className="space-y-12">
       <section>
         <h2 className="text-lg font-medium text-light-text dark:text-dark-text mb-2">
           Recent Notes

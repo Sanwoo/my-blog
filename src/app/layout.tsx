@@ -9,6 +9,7 @@ import "./globals.css";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { AuthProvider } from "@/lib/auth-context";
 import { GradientBackground } from "@/components/shared/GradientBackground";
+import { ParticleCanvas } from "@/components/shared/ParticleCanvas";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -53,6 +54,7 @@ export default function RootLayout({
       >
         <ThemeScript />
         <GradientBackground />
+        <ParticleCanvas />
         <AuthProvider>
           {children}
         </AuthProvider>
