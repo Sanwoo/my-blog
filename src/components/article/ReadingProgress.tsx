@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     const updateProgress = () => {
       const article = document.querySelector("article[data-reading-progress]");
@@ -23,7 +24,7 @@ export function ReadingProgress() {
 
   return (
     <div
-      className="fixed top-16 left-0 right-0 z-40 h-0.5 bg-light-border dark:bg-dark-border"
+      className="fixed top-14 left-0 right-0 z-40 h-[2px]"
       role="progressbar"
       aria-valuenow={progress}
       aria-valuemin={0}
@@ -31,7 +32,7 @@ export function ReadingProgress() {
       aria-label="阅读进度"
     >
       <div
-        className="h-full bg-light-accent dark:bg-dark-accent transition-[width] duration-150"
+        className="h-full bg-light-accent dark:bg-dark-accent transition-[width] duration-150 opacity-80"
         style={{ width: `${progress}%` }}
       />
     </div>

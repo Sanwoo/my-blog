@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase-server";
+import { estimateReadingTime } from "@/lib/markdown";
 
 const DEFAULT_AUTHOR = "Alex.Design";
 const DEFAULT_AUTHOR_HANDLE = "@alex_ui_lab";
@@ -14,6 +15,7 @@ export interface PublishBody {
   seoDescription?: string;
   publishAt?: string;
   content: string;
+  contentFormat?: string;
 }
 
 function validateBody(body: unknown): { ok: true; data: PublishBody } | { ok: false; status: number; message: string } {
@@ -38,6 +40,7 @@ function validateBody(body: unknown): { ok: true; data: PublishBody } | { ok: fa
       seoDescription: typeof b.seoDescription === "string" ? b.seoDescription : "",
       publishAt: typeof b.publishAt === "string" ? b.publishAt : undefined,
       tags,
+      contentFormat: typeof b.contentFormat === "string" ? b.contentFormat : "html",
     },
   };
 }
@@ -70,21 +73,23 @@ export async function POST(request: Request) {
 
   const { data } = validated;
   const publishedAt = parsePublishAt(data.publishAt);
+  const readTime = data.content ? estimateReadingTime(data.content) : null;
 
   const row = {
     slug: data.slug,
     title: data.title,
     excerpt: data.excerpt || null,
     content: data.content || null,
+    content_format: data.contentFormat || "html",
     category: data.category || null,
     category_label: data.category || null,
     author: DEFAULT_AUTHOR,
     author_handle: DEFAULT_AUTHOR_HANDLE,
     avatar: DEFAULT_AVATAR,
-    published_at: publishedAt,
+    published_at: publishedAt || new Date().toISOString(),
     tags: data.tags ?? [],
     seo_description: data.seoDescription || null,
-    read_time: null,
+    read_time: readTime,
     views: null,
     updated_at: new Date().toISOString(),
   };

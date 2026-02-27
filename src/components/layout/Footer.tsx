@@ -1,34 +1,25 @@
+"use client";
+
 import Link from "next/link";
+import { OnlineIndicator } from "@/components/shared/OnlineIndicator";
 
 export function Footer() {
   return (
-    <footer className="border-t border-light-border dark:border-dark-border mt-20 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-sm text-light-muted dark:text-dark-muted">
-            © 2024 Echoes Blog. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-sm text-light-muted dark:text-dark-muted">
-            <Link
-              href="#"
-              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="#"
-              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
-            >
-              Terms
-            </Link>
-            <Link
-              href="#"
-              className="hover:text-light-text dark:hover:text-dark-text transition-colors"
-            >
-              RSS
-            </Link>
-          </div>
+    <footer className="border-t border-light-border/40 dark:border-dark-border/40 mt-16">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 py-12 text-center space-y-5">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13px] text-light-muted dark:text-dark-muted">
+          {["关于", "文章", "笔记", "时间线"].map(l => (
+            <Link key={l} href="#" className="hover:text-light-text-secondary dark:hover:text-dark-text-secondary transition-colors duration-200">{l}</Link>
+          ))}
+          <span className="text-light-border dark:text-dark-border">·</span>
+          {["RSS", "Sitemap", "GitHub"].map(l => (
+            <Link key={l} href="#" className="hover:text-light-text-secondary dark:hover:text-dark-text-secondary transition-colors duration-200">{l}</Link>
+          ))}
         </div>
+        <p className="text-[12px] text-light-muted dark:text-dark-muted">
+          © 2020–{new Date().getFullYear()} Echoes · Stay hungry, Stay foolish.
+        </p>
+        <OnlineIndicator pagePath="/" showPageCount={false} />
       </div>
     </footer>
   );

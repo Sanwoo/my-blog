@@ -4,10 +4,12 @@ import { Footer } from "@/components/layout/Footer";
 import { ReadingProgress } from "@/components/article/ReadingProgress";
 import { ArticleHeader } from "@/components/article/ArticleHeader";
 import { ArticleBody } from "@/components/article/ArticleBody";
+import { MarkdownRenderer } from "@/components/article/MarkdownRenderer";
 import { ArticleTOC } from "@/components/article/ArticleTOC";
-import { CommentForm } from "@/components/article/CommentForm";
-import { CommentList } from "@/components/article/CommentList";
-import { RelatedArticles } from "@/components/article/RelatedArticles";
+import { CommentSection } from "@/components/article/CommentSection";
+import { ShareButtons } from "@/components/article/ShareButtons";
+import { OnlineIndicator } from "@/components/shared/OnlineIndicator";
+import { ScrollFadeIn } from "@/components/shared/ScrollFadeIn";
 import { getPostBySlug, getAllPosts } from "@/lib/supabase-posts";
 import type { Metadata } from "next";
 
@@ -33,37 +35,59 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const articleUrl = `${siteUrl}/posts/${slug}`;
+  const articleTitle = post.meta.title.replace(/\n/g, " ");
+
   return (
     <div className="min-h-screen flex flex-col bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text">
       <Nav />
       <ReadingProgress />
-      <main className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex-grow">
-        <ArticleHeader meta={post.meta} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative">
-          <div className="lg:col-span-8">
-            <ArticleBody content={post.content} />
-          </div>
-          <ArticleTOC items={post.tocItems} />
+      <main className="pt-24 md:pt-32 pb-16 flex-grow">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <ArticleHeader meta={post.meta} />
         </div>
 
-        <div className="my-20 h-px bg-light-border dark:bg-dark-border" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center gap-12">
+          {/* Main content */}
+          <div className="max-w-3xl w-full">
+            <ScrollFadeIn>
+              {post.contentFormat === "markdown" ? (
+                <MarkdownRenderer content={post.content} />
+              ) : (
+                <ArticleBody content={post.content} />
+              )}
+            </ScrollFadeIn>
 
-        <section className="max-w-3xl mx-auto">
-          <h3 className="font-serif text-2xl font-bold mb-8 text-light-text dark:text-dark-text flex items-center gap-3">
-            评论 <span className="text-base font-sans font-normal text-light-muted dark:text-dark-muted">(12)</span>
-          </h3>
-          <CommentForm />
-          <CommentList />
-        </section>
+            {/* Share & Online */}
+            <ScrollFadeIn>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-12 pt-8 border-t border-light-border/40 dark:border-dark-border/40">
+                <OnlineIndicator pagePath={`/posts/${slug}`} postSlug={slug} />
+                <ShareButtons title={articleTitle} url={articleUrl} />
+              </div>
+            </ScrollFadeIn>
 
-        <RelatedArticles />
+            {/* Comments */}
+            <ScrollFadeIn delay={100}>
+              <div className="mt-16">
+                <CommentSection postSlug={slug} />
+              </div>
+            </ScrollFadeIn>
+          </div>
+
+          {/* TOC sidebar */}
+          <ArticleTOC items={post.tocItems} />
+        </div>
       </main>
+
       <Footer />
     </div>
   );

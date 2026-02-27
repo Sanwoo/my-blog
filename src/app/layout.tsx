@@ -7,6 +7,9 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { ThemeScript } from "@/components/theme/ThemeScript";
+import { AuthProvider } from "@/lib/auth-context";
+import { GradientBackground } from "@/components/shared/GradientBackground";
+import { ParticleCanvas } from "@/components/shared/ParticleCanvas";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -50,7 +53,11 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} antialiased font-sans bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text`}
       >
         <ThemeScript />
-        {children}
+        <GradientBackground />
+        <ParticleCanvas />
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

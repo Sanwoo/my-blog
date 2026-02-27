@@ -2,55 +2,52 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Menu, X } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, PenSquare } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useAuth } from "@/lib/auth-context";
 
 const navLinks = [
-  { href: "/", label: "首页" },
-  { href: "#", label: "技术" },
-  { href: "#", label: "设计" },
-  { href: "#", label: "生活" },
+  { href: "/", label: "首页", active: true },
+  { href: "#", label: "文章" },
+  { href: "#", label: "笔记" },
+  { href: "#", label: "时间线" },
   { href: "#", label: "关于" },
 ];
 
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <nav
-      className={`fixed w-full top-0 z-50 glass-nav transition-all duration-300 ${
-        scrolled ? "shadow-sm" : ""
-      }`}
-      id="navbar"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0 flex items-center">
-            <Link
-              href="/"
-              className="font-serif text-2xl italic font-bold tracking-tight hover:opacity-80 transition-opacity text-light-text dark:text-dark-text"
-            >
-              Echoes.
-            </Link>
-          </div>
+    <nav className={`fixed w-full top-0 z-50 glass-nav transition-all duration-300 ${scrolled ? "border-b border-light-border/60 dark:border-dark-border/60" : ""}`}>
+      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Avatar */}
+          <Link href="/" className="flex-shrink-0">
+            <div className="w-9 h-9 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
+              <Image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar" width={36} height={36} className="object-cover" unoptimized />
+            </div>
+          </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map(({ href, label }) => (
+          {/* Center nav */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map(({ href, label, active }) => (
               <Link
                 key={label}
                 href={href}
-                className={`text-sm font-medium transition-colors ${
-                  label === "首页"
-                    ? "text-light-text dark:text-dark-text hover:text-light-accent dark:hover:text-dark-accent"
-                    : "text-light-muted dark:text-dark-muted hover:text-light-text dark:hover:text-dark-text"
+                className={`nav-link px-3.5 py-1.5 text-[15px] transition-colors duration-200 ${
+                  active
+                    ? "text-light-accent dark:text-dark-accent font-medium"
+                    : "text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text dark:hover:text-dark-text"
                 }`}
               >
                 {label}
@@ -58,55 +55,40 @@ export function Nav() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              className="p-2 text-light-text dark:text-dark-text hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors"
-              aria-label="搜索"
-            >
-              <Search width={20} height={20} aria-hidden />
-            </button>
+          {/* Right */}
+          <div className="flex items-center gap-1.5">
+            {isAdmin && (
+              <Link href="/editor" className="p-2 text-light-muted dark:text-dark-muted hover:text-light-accent dark:hover:text-dark-accent transition-colors duration-200 rounded-lg">
+                <PenSquare width={16} height={16} />
+              </Link>
+            )}
             <ThemeToggle />
+            {user && (
+              <div className="hidden md:block w-7 h-7 rounded-full overflow-hidden ml-0.5">
+                <Image src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} alt="" width={28} height={28} className="object-cover" unoptimized />
+              </div>
+            )}
             <button
               type="button"
-              className="md:hidden p-2 text-light-text dark:text-dark-text hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors"
+              className="md:hidden p-2 text-light-text-secondary dark:text-dark-text-secondary rounded-lg"
               aria-label="菜单"
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen((o) => !o)}
+              onClick={() => setMobileOpen(o => !o)}
             >
-              {mobileOpen ? (
-                <X width={24} height={24} aria-hidden />
-              ) : (
-                <Menu width={24} height={24} aria-hidden />
-              )}
+              {mobileOpen ? <X width={20} height={20} /> : <Menu width={20} height={20} />}
             </button>
           </div>
         </div>
       </div>
 
-      <div
-        className={`md:hidden absolute w-full bg-light-bg dark:bg-dark-bg border-b border-light-border dark:border-dark-border py-4 px-6 shadow-xl ${
-          mobileOpen ? "block" : "hidden"
-        }`}
-        id="mobile-menu"
-      >
-        <div className="flex flex-col space-y-4">
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={label}
-              href={href}
-              className={`text-lg font-medium ${
-                label === "首页"
-                  ? "text-light-text dark:text-dark-text"
-                  : "text-light-muted dark:text-dark-muted"
-              }`}
-              onClick={() => setMobileOpen(false)}
-            >
+      {mobileOpen && (
+        <div className="md:hidden border-t border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg px-6 py-3 space-y-0.5">
+          {navLinks.map(({ href, label, active }) => (
+            <Link key={label} href={href} className={`block px-3 py-2.5 rounded-lg text-[15px] ${active ? "text-light-accent dark:text-dark-accent font-medium" : "text-light-text-secondary dark:text-dark-text-secondary"}`} onClick={() => setMobileOpen(false)}>
               {label}
             </Link>
           ))}
         </div>
-      </div>
+      )}
     </nav>
   );
 }

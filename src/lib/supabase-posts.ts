@@ -2,6 +2,7 @@ import { getSupabaseServer } from "@/lib/supabase-server";
 import type { PostMeta } from "@/data/placeholderPost";
 import type { TOCItem } from "@/data/placeholderPost";
 import type { ArticleCardData } from "@/components/home/ArticleCard";
+import { extractTOC, estimateReadingTime } from "@/lib/markdown";
 
 const DEFAULT_READ_TIME = "8 分钟阅读";
 const DEFAULT_VIEWS = "0 阅读";
@@ -32,7 +33,7 @@ export async function getAllPosts(): Promise<ArticleCardData[]> {
   try {
     const { data, error } = await getSupabaseServer()
       .from("posts")
-      .select("slug, title, excerpt, category, published_at, created_at, read_time")
+      .select("slug, title, excerpt, category, published_at, created_at, read_time, content, content_format")
       .order("published_at", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: false });
 
@@ -44,13 +45,15 @@ export async function getAllPosts(): Promise<ArticleCardData[]> {
   const list = (data ?? []).map((row) => {
     const dateSource = row.published_at ?? row.created_at ?? null;
     const dateStr = typeof dateSource === "string" ? dateSource : null;
+    const content = typeof row.content === "string" ? row.content : "";
+    const readTime = row.read_time ?? (content ? estimateReadingTime(content) : DEFAULT_READ_TIME);
     return {
       slug: row.slug ?? undefined,
       category: row.category ?? "Uncategorized",
       date: formatDate(dateStr),
       title: row.title ?? "",
       excerpt: row.excerpt ?? "",
-      readTime: row.read_time ?? DEFAULT_READ_TIME,
+      readTime,
     };
   });
 
@@ -64,6 +67,7 @@ export async function getAllPosts(): Promise<ArticleCardData[]> {
 export interface PostWithContent {
   meta: PostMeta;
   content: string;
+  contentFormat: string;
   tocItems: TOCItem[];
 }
 
@@ -84,6 +88,14 @@ export async function getPostBySlug(slug: string): Promise<PostWithContent | nul
 
   const dateSource = data.published_at ?? data.created_at ?? null;
   const dateStr = typeof dateSource === "string" ? dateSource : null;
+  const content = typeof data.content === "string" ? data.content : "";
+  const contentFormat = data.content_format ?? "html";
+
+  const tocItems = contentFormat === "markdown"
+    ? extractTOC(content).map((h) => ({ id: h.id, label: h.text }))
+    : parseTocFromHtml(content);
+
+  const readTime = data.read_time ?? (content ? estimateReadingTime(content) : DEFAULT_READ_TIME);
 
   const meta: PostMeta = {
     slug: data.slug ?? slug,
@@ -94,14 +106,11 @@ export async function getPostBySlug(slug: string): Promise<PostWithContent | nul
     authorHandle: data.author_handle ?? "",
     avatar: data.avatar ?? "",
     date: formatDate(dateStr),
-    readTime: data.read_time ?? DEFAULT_READ_TIME,
+    readTime,
     views: data.views ?? DEFAULT_VIEWS,
   };
 
-  const content = typeof data.content === "string" ? data.content : "";
-  const tocItems = content ? parseTocFromHtml(content) : [];
-
-  return { meta, content, tocItems };
+  return { meta, content, contentFormat, tocItems };
   } catch (e) {
     console.error("[getPostBySlug]", e);
     return null;
