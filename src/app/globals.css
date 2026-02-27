@@ -73,14 +73,14 @@ body {
 ::selection { background: rgba(27, 176, 167, 0.2); color: inherit; }
 .dark ::selection { background: rgba(45, 212, 191, 0.25); color: inherit; }
 
-/* Glass nav — warm tinted */
+/* Glass nav — frosted warm tint like innei.in */
 .glass-nav {
-  background: rgba(250, 249, 247, 0.82);
-  backdrop-filter: saturate(180%) blur(16px);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  background: rgba(250, 249, 247, 0.78);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
 }
 .dark .glass-nav {
-  background: rgba(17, 17, 17, 0.82);
+  background: rgba(17, 17, 17, 0.78);
 }
 
 /* Utility clamp */
@@ -181,7 +181,22 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Smooth gradient background transition */
-.gradient-bg {
-  transition: opacity 0.5s ease;
+/* Floating blob animations */
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, 40px) scale(1.05); }
+  50% { transform: translate(-30px, 80px) scale(0.95); }
+  75% { transform: translate(40px, -20px) scale(1.02); }
+}
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, 60px) scale(1.08); }
+  66% { transform: translate(30px, -40px) scale(0.96); }
+}
+@keyframes blob-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  20% { transform: translate(40px, -50px) scale(1.04); }
+  40% { transform: translate(-60px, 20px) scale(0.97); }
+  60% { transform: translate(20px, 60px) scale(1.06); }
+  80% { transform: translate(-30px, -30px) scale(0.98); }
 }
