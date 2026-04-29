@@ -24,6 +24,8 @@
     "@tiptap/starter-kit": "^3.19.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
+    "@tsparticles/updater-roll": "^3.9.1",
+    "@tsparticles/updater-tilt": "^3.9.1",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
