@@ -3,7 +3,7 @@ import { syncProfileFromUser } from "@/lib/auth";
 import { authDialogHref, safeAppPath } from "@/lib/navigation";
 import { authCallbackQuerySchema } from "@/lib/schemas/auth";
 import { getSupabaseAuthServer } from "@/lib/supabase-server";
-import { getSiteUrl } from "@/lib/site";
+import { originFromRequest } from "@/lib/url";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
   const query = queryResult.success ? queryResult.data : null;
   const next = safeAppPath(query?.next);
   const code = query?.code ?? null;
-  const siteUrl = getSiteUrl();
+  const siteUrl = originFromRequest(request);
   const redirectToAuthDialog = (error: string) =>
     NextResponse.redirect(new URL(authDialogHref(next, { error }), siteUrl));
 

@@ -32,6 +32,10 @@ function mockNativeShare(share = vi.fn().mockResolvedValue(undefined)) {
   return share;
 }
 
+function runtimePostUrl(slug = "quiet-note") {
+  return `${window.location.origin}/posts/${slug}`;
+}
+
 afterEach(() => {
   vi.restoreAllMocks();
   restoreNavigatorProperty("clipboard", originalClipboardDescriptor);
@@ -50,7 +54,7 @@ describe("ArticleShareControls", () => {
     fireEvent.click(screen.getByRole("button", { name: "复制摘要" }));
 
     await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith("Quiet Note\nA small signal.\nhttp://localhost:3000/posts/quiet-note");
+      expect(writeText).toHaveBeenCalledWith(`Quiet Note\nA small signal.\n${runtimePostUrl()}`);
     });
     expect(await screen.findByText("摘要已复制。")).toBeInTheDocument();
   });
@@ -63,7 +67,7 @@ describe("ArticleShareControls", () => {
     fireEvent.click(await screen.findByRole("button", { name: "复制链接" }));
 
     await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith("http://localhost:3000/posts/quiet-note");
+      expect(writeText).toHaveBeenCalledWith(runtimePostUrl());
     });
     expect(await screen.findByText("链接已复制。")).toBeInTheDocument();
   });
@@ -90,7 +94,7 @@ describe("ArticleShareControls", () => {
       expect(share).toHaveBeenCalledWith({
         title: "Quiet Note",
         text: "A small signal.",
-        url: "http://localhost:3000/posts/quiet-note",
+        url: runtimePostUrl(),
       });
     });
     expect(await screen.findByText("已唤起系统分享。")).toBeInTheDocument();

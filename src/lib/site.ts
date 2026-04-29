@@ -12,12 +12,3 @@ export const AUTHOR_PROFILE = {
   telegram: 'https://t.me/KiyamaHarumiX',
   github: 'https://github.com/Sanwoo',
 }
-
-export function getSiteUrl() {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'http://localhost:3000'
-  return raw.endsWith('/') ? raw.slice(0, -1) : raw
-}
-
-export function absoluteUrl(path = '/') {
-  return `${getSiteUrl()}${path.startsWith('/') ? path : `/${path}`}`
-}

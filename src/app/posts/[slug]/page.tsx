@@ -11,8 +11,10 @@ import { ArticleComments } from '@/components/article/ArticleComments'
 import { getCommentsForPost, getReactionSummary } from '@/lib/community'
 import { getViewerFromCookies } from '@/lib/auth'
 import { getAdjacentPosts, getPublicPostBySlug } from '@/lib/posts'
-import { absoluteUrl, AUTHOR_PROFILE, SITE_NAME, SITE_SUBTITLE } from '@/lib/site'
+import { AUTHOR_PROFILE, SITE_NAME, SITE_SUBTITLE } from '@/lib/site'
 import { buildPostOgImageUrl, getShareSummary } from '@/lib/share'
+import { absoluteUrl } from '@/lib/url'
+import { getRequestOrigin } from '@/lib/url-server'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -23,9 +25,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await getPublicPostBySlug(slug)
   if (!post) return {}
 
+  const origin = await getRequestOrigin()
   const description = getShareSummary(post.seoDescription || post.excerpt, SITE_SUBTITLE, 160)
-  const url = absoluteUrl(`/posts/${post.slug}`)
-  const ogImage = buildPostOgImageUrl(post.slug, post.updatedAt ?? post.workingCopyUpdatedAt ?? post.publishedAt ?? post.slug)
+  const url = absoluteUrl(origin, `/posts/${post.slug}`)
+  const ogImage = buildPostOgImageUrl(origin, post.slug, post.updatedAt ?? post.workingCopyUpdatedAt ?? post.publishedAt ?? post.slug)
 
   return {
     title: post.title,

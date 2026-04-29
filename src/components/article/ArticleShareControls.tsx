@@ -66,15 +66,16 @@ export function ArticleShareControls({
     message: DEFAULT_SHARE_STATUS,
     tone: 'neutral',
   })
-  const shareUrl = getPostAbsoluteUrl(slug)
   const shareSummary = getShareSummary(excerpt, '')
   const shareText = getPostShareText(title, shareSummary)
-  const clipboardText = buildClipboardShareText(title, shareUrl, excerpt)
   const nativeShareAvailable = useSyncExternalStore(
     subscribeNavigatorShare,
     canUseNativeShare,
     getNativeShareServerSnapshot,
   )
+
+  const buildShareUrl = () => getPostAbsoluteUrl(window.location.origin, slug)
+  const buildClipboardText = () => buildClipboardShareText(title, buildShareUrl(), excerpt)
 
   const announce = (message: string, tone: ShareStatusTone = 'success') => {
     setStatus({ message, tone })
@@ -125,6 +126,8 @@ export function ArticleShareControls({
   }
 
   const handleSystemShare = async () => {
+    const shareUrl = buildShareUrl()
+
     if (!navigator.share) {
       await copyText(shareUrl, '链接已复制。')
       return
@@ -170,11 +173,11 @@ export function ArticleShareControls({
         </div>
 
         <div className="grid gap-2 sm:grid-cols-3">
-          <Button type="button" className="justify-start rounded-2xl" onClick={() => void copyText(shareUrl, '链接已复制。')}>
+          <Button type="button" className="justify-start rounded-2xl" onClick={() => void copyText(buildShareUrl(), '链接已复制。')}>
             <Link2 width={16} height={16} aria-hidden />
             复制链接
           </Button>
-          <Button type="button" variant="outline" className="justify-start rounded-2xl" onClick={() => void copyText(clipboardText, '摘要已复制。')}>
+          <Button type="button" variant="outline" className="justify-start rounded-2xl" onClick={() => void copyText(buildClipboardText(), '摘要已复制。')}>
             <ClipboardCopy width={16} height={16} aria-hidden />
             复制摘要
           </Button>
@@ -189,19 +192,19 @@ export function ArticleShareControls({
         <div className="space-y-2 border-t border-border/60 pt-3">
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground/72">发送到平台</p>
           <div className="grid gap-2 sm:grid-cols-5">
-            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => openShareWindow(buildXShareUrl(shareUrl, shareText), 'X')}>
+            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => openShareWindow(buildXShareUrl(buildShareUrl(), shareText), 'X')}>
               X
             </Button>
-            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => openShareWindow(buildTelegramShareUrl(shareUrl, shareText), 'Telegram')}>
+            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => openShareWindow(buildTelegramShareUrl(buildShareUrl(), shareText), 'Telegram')}>
               Telegram
             </Button>
-            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => openShareWindow(buildWeiboShareUrl(shareUrl, shareText), '微博')}>
+            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => openShareWindow(buildWeiboShareUrl(buildShareUrl(), shareText), '微博')}>
               微博
             </Button>
-            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => void copyText(clipboardText, '已复制，可到微信粘贴分享。')}>
+            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => void copyText(buildClipboardText(), '已复制，可到微信粘贴分享。')}>
               微信
             </Button>
-            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => void copyText(clipboardText, '已复制，可到小红书粘贴分享。')}>
+            <Button type="button" size="sm" variant="subtle" className="rounded-full" onClick={() => void copyText(buildClipboardText(), '已复制，可到小红书粘贴分享。')}>
               小红书
             </Button>
           </div>

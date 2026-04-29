@@ -7,7 +7,6 @@ NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_your_key"
 SUPABASE_SECRET_KEY="sb_secret_your_key"
 ADMIN_EMAIL="you@example.com"
-NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 ```
 
 ### Supabase Dashboard

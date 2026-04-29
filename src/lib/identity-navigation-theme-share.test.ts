@@ -43,7 +43,7 @@ describe("share helpers", () => {
     expect(buildTelegramShareUrl("https://example.test", "hi")).toBe("https://t.me/share/url?url=https%3A%2F%2Fexample.test&text=hi");
     expect(buildWeiboShareUrl("https://example.test", "hi")).toBe("https://service.weibo.com/share/share.php?url=https%3A%2F%2Fexample.test&title=hi");
     expect(buildClipboardShareText("Title", "https://example.test", "excerpt")).toBe("Title\nexcerpt\nhttps://example.test");
-    expect(buildPostOgImageUrl("quiet-note", "2026-04-28T00:00:00.000Z")).toBe("http://localhost:3000/posts/quiet-note/opengraph-image?v=1777334400000");
+    expect(buildPostOgImageUrl("https://example.test", "quiet-note", "2026-04-28T00:00:00.000Z")).toBe("https://example.test/posts/quiet-note/opengraph-image?v=1777334400000");
   });
 });
 

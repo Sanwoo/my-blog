@@ -15,8 +15,8 @@ import { writePendingAuthNotice, type PendingAuthNotice } from '@/lib/auth-notic
 import { safeAppPath, type AuthDialogMode } from '@/lib/navigation'
 import { signInInputSchema, signUpInputSchema } from '@/lib/schemas/auth'
 import { firstIssueMessage } from '@/lib/schemas/runtime'
-import { absoluteUrl } from '@/lib/site'
 import { getSupabaseBrowser } from '@/lib/supabase-browser'
+import { absoluteUrlFromBrowser } from '@/lib/url'
 import { cn } from '@/lib/utils'
 
 export type AuthPanelMode = AuthDialogMode
@@ -346,7 +346,7 @@ export function AuthPanel({
       const { error: authError } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: absoluteUrl(`/auth/callback?next=${encodeURIComponent(nextPath)}`),
+          redirectTo: absoluteUrlFromBrowser(`/auth/callback?next=${encodeURIComponent(nextPath)}`),
         },
       })
 

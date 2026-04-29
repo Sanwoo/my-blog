@@ -1,4 +1,4 @@
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/lib/url";
 
 const SHARE_SUMMARY_MAX_LENGTH = 96;
 const CLIPBOARD_SUMMARY_MAX_LENGTH = 140;
@@ -22,8 +22,8 @@ function normalizeVersionKey(value: string | null | undefined) {
   return Number.isNaN(time) ? normalized : String(time);
 }
 
-export function getPostAbsoluteUrl(slug: string) {
-  return absoluteUrl(`/posts/${slug}`);
+export function getPostAbsoluteUrl(origin: string, slug: string) {
+  return absoluteUrl(origin, `/posts/${slug}`);
 }
 
 export function getShareSummary(value: string | null | undefined, fallback = "", maxLength = SHARE_SUMMARY_MAX_LENGTH) {
@@ -31,8 +31,8 @@ export function getShareSummary(value: string | null | undefined, fallback = "",
   return truncateShareText(normalized, maxLength);
 }
 
-export function buildPostOgImageUrl(slug: string, versionKey?: string | null) {
-  const url = new URL(absoluteUrl(`/posts/${slug}/opengraph-image`));
+export function buildPostOgImageUrl(origin: string, slug: string, versionKey?: string | null) {
+  const url = new URL(absoluteUrl(origin, `/posts/${slug}/opengraph-image`));
   const version = normalizeVersionKey(versionKey);
 
   if (version) {

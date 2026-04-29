@@ -29,8 +29,8 @@ import {
 } from "@/lib/schemas/account";
 import { avatarFileSchema } from "@/lib/schemas/primitives";
 import { firstIssueMessage } from "@/lib/schemas/runtime";
-import { absoluteUrl } from "@/lib/site";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
+import { absoluteUrlFromBrowser } from "@/lib/url";
 import type { InteractionNotification, ViewerSession } from "@/lib/types";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { cn } from "@/lib/utils";
@@ -347,7 +347,7 @@ export function AccountCenterContent({
       const { error } = await supabase.auth.linkIdentity({
         provider: "github",
         options: {
-          redirectTo: absoluteUrl(`/auth/callback?next=${encodeURIComponent(pathname || "/")}`),
+          redirectTo: absoluteUrlFromBrowser(`/auth/callback?next=${encodeURIComponent(pathname || "/")}`),
         },
       });
 
